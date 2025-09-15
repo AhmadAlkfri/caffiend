@@ -38,7 +38,7 @@ export default function Hisotry(){
                             setSelectedCup(coffeeIndex)
                         }}>
                             <i className="fa-solid fa-mug-hot"></i>
-                            <p>{day}/{month}</p>
+                            <h6>{day}/{month}</h6>
                         </div>
                     )
                 })}            

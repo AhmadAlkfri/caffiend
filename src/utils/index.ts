@@ -109,7 +109,7 @@ export const coffeeOptions: types.coffeeOption[] = [
 const halfLifeHours = 5
 
 
-export function calculateCurrentCaffeineLevel(historyData: types.historyType) {
+export function calculateCurrentCaffeineLevel(historyData: types.historyType): number {
     const currentTime = Date.now()
     const halfLife = halfLifeHours * 60 * 60 * 1000 // 5 hours in milliseconds
     const maxAge = 48 * 60 * 60 * 1000 // 48 hours in milliseconds
@@ -128,15 +128,15 @@ export function calculateCurrentCaffeineLevel(historyData: types.historyType) {
         }
     }
 
-    return totalCaffeine.toFixed(2)
+    return totalCaffeine
 }
 
-export function getCaffeineAmount(coffeeName: string) {
+export function getCaffeineAmount(coffeeName: string): number {
     const coffee = coffeeOptions.find(c => c.name === coffeeName)
     return coffee ? coffee.caffeine : 0
 }
 
-export function getTopThreeCoffees(historyData: types.historyType) {
+export function getTopThreeCoffees(historyData: types.historyType): types.topThreeType[] {
     const coffeeCount: types.coffeeCountType = {}
 
     // Count occurrences of each coffee type
@@ -153,7 +153,7 @@ export function getTopThreeCoffees(historyData: types.historyType) {
 
     const totalCoffees = Object.values(coffeeCount).reduce((sum, count) => sum + count, 0)
 
-    const topThree = sortedCoffees.slice(0, 3).map(([coffeeName, count]) => {
+    const topThree: types.topThreeType[] = sortedCoffees.slice(0, 3).map(([coffeeName, count]) => {
         const percentage = ((count / totalCoffees) * 100).toFixed(2)
         return {
             coffeeName: coffeeName,
@@ -165,7 +165,7 @@ export function getTopThreeCoffees(historyData: types.historyType) {
     return topThree
 }
 
-export function timeSinceConsumption(utcMilliseconds: number) {
+export function timeSinceConsumption(utcMilliseconds: number): string {
     const now = Date.now()
     const diffInMilliseconds = now - utcMilliseconds
 
@@ -190,7 +190,19 @@ export function timeSinceConsumption(utcMilliseconds: number) {
     return result.trim()
 }
 
-export function calculateCoffeeStats(coffeeConsumptionHistory: types.historyType) {
+export function getDateFromUTC(utcMilliseconds: number): string{
+    const date = new Date(utcMilliseconds)
+    return date.toLocaleString()
+}
+
+export function getDDMM(utcMilliseconds: number): {day: string, month:string}{
+    const date = new Date(utcMilliseconds)
+    const month = (date.getMonth() + 1).toLocaleString('en-US', {minimumIntegerDigits: 2})
+    const day = (date.getDate()).toLocaleString('en-US', {minimumIntegerDigits: 2})
+    return {day, month}
+}
+
+export function calculateCoffeeStats(coffeeConsumptionHistory: types.historyType): types.coffeeStatsType {
     const dailyStats: types.dailyStatsType= {}
     let totalCoffees = 0
     let totalCost = 0
@@ -215,7 +227,6 @@ export function calculateCoffeeStats(coffeeConsumptionHistory: types.historyType
     }
 
     const days = Object.keys(dailyStats).length;
-    //const dailyCaffeine = {};
     for (const [, stats] of Object.entries(dailyStats)) {
         if (stats.caffeine > 0) {
             totalCaffeine += stats.caffeine
@@ -223,13 +234,13 @@ export function calculateCoffeeStats(coffeeConsumptionHistory: types.historyType
         }
     }
 
-    const averageDailyCaffeine = totalDaysWithCoffee > 0 ? (totalCaffeine / totalDaysWithCoffee).toFixed(2) : 0
-    const averageDailyCost = totalDaysWithCoffee > 0 ? (totalCost / totalDaysWithCoffee).toFixed(2) : 0
-    console.log(totalCost, typeof totalCost)
+    const averageDailyCaffeine = totalDaysWithCoffee > 0 ? (totalCaffeine / totalDaysWithCoffee) : 0
+    const averageDailyCost = totalDaysWithCoffee > 0 ? (totalCost / totalDaysWithCoffee) : 0
+
     return {
         daily_caffeine: averageDailyCaffeine,
         daily_cost: averageDailyCost,
-        average_coffees: (totalCoffees / days).toFixed(2),
-        total_cost: totalCost.toFixed(2),
+        average_coffees: (totalCoffees / days),
+        total_cost: totalCost,
     };
 }

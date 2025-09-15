@@ -94,7 +94,7 @@
 
         --border-primary: #29325b;
         --border-secondary: #323c71;
-        --border-highlight: #4649af;
+        --border-highlight: #d39ff1;
         --border-tertiary: '';
 
         --shadow-dark: '';
@@ -181,6 +181,7 @@ h6 {
 p {
     display: block;
     width: fit-content;
+    white-space: break-spaces;
 }
 
 span {

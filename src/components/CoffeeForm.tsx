@@ -1,15 +1,58 @@
 import { useState } from "react"
 import { coffeeOptions } from "../utils"
+import type { User } from "firebase/auth"
+import type { historyType } from "../utils/types"
+import { useAuth } from "../context/AuthContext"
+import { doc, setDoc } from "firebase/firestore"
+import { db } from "../../firebase"
+type formProps = {
+    setShowModal: React.Dispatch<React.SetStateAction<boolean>>
+    isAuthenticated: User | null
+}
 
-export default function CoffeeForm(){
+export default function CoffeeForm(props: formProps){
+    const {setShowModal, isAuthenticated} = props
     const [showCoffeeTypes, setShowCoffeeTypes] = useState(false)
     const [coffeeSelection, setCoffeeSelection] = useState("")
     const [coffeeCost, setCoffeeCost] = useState(0)
     const [hours, setHours] = useState(0)
     const [mins, setMins] = useState(30)
+    const { globalUser, globalData, setGlobalData } = useAuth()
+    async function handleSubmitForm(){
+        if(!isAuthenticated){
+            setShowModal(true)
+            return
+        }
+        
+        if(!coffeeSelection) { return }
+        
+        try{
+            const newItem = {"name": coffeeSelection, "cost": coffeeCost}
+            const newGlobalData: historyType= {
+                ...(globalData || {})
+            }
+            
+            const nowTime = Date.now()
+            const timeToSubtract = (hours * 60 * 60 * 1000) + (mins * 60 * 1000)
+            const timestamp = nowTime - timeToSubtract
+            newGlobalData[timestamp] = newItem
 
-    function handleSubmitForm(){
-        console.log(coffeeSelection, coffeeCost, hours, mins)
+            setGlobalData(newGlobalData)
+            
+            const userRef = doc(db, "users", globalUser?.uid || "")
+            await setDoc(userRef, {[timestamp]: newItem}, {merge: true})
+            setCoffeeSelection("")
+            setHours(0)
+            setMins(30)
+            setCoffeeCost(0)
+            setShowCoffeeTypes(false)
+
+        }catch(err){
+            console.log(err)
+        }
+        
+
+
     }
 
     return(

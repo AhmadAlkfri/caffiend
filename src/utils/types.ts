@@ -1,3 +1,5 @@
+import type { User, UserCredential } from "firebase/auth"
+
 export type coffeeType = {
     name: string
     cost: number
@@ -5,7 +7,7 @@ export type coffeeType = {
 
 export type historyType = {
     [time: string]: coffeeType
-}
+} | null
 
 export type coffeeOption = {
     name: string
@@ -31,4 +33,15 @@ export type coffeeStatsType = {
     daily_cost: number
     average_coffees: number
     total_cost: number
+}
+
+export type contextType = {
+    globalUser: User | null
+    globalData: historyType | null
+    isLoading: boolean
+    setGlobalData: (React.Dispatch<React.SetStateAction<object | null>>) | ((obj:object) => void)
+    signUp: (email: string, password: string) => (Promise<UserCredential> | void)
+    logIn: (email: string, password: string) => (Promise<UserCredential> | void)
+    logOut: () => (Promise<void> | void )
+    resetPassword: (email: string) => void
 }

@@ -21,52 +21,6 @@ export const statusLevels = {
     },
 }
 
-export const coffeeConsumptionHistory: types.historyType = {
-    "1727579064032": { "name": "Americano", "cost": 5.52 },
-    "1727629263026": { "name": "Rockstar Energy (16oz)", "cost": 6.78 },
-    "1727571485301": { "name": "Macchiato", "cost": 6.93 },
-    "1727585485245": { "name": "Instant Coffee (1 tsp)", "cost": 4.90 },
-    "1727614392214": { "name": "Irish Coffee", "cost": 4.88 },
-    "1727642088808": { "name": "Flat White", "cost": 5.04 },
-    "1727600684481": { "name": "Latte", "cost": 3.99 },
-    "1727615806680": { "name": "Drip Coffee (12oz)", "cost": 3.59 },
-    "1727609623836": { "name": "Bang Energy (16oz)", "cost": 3.43 },
-    "1727647449961": { "name": "Monster Java (15oz)", "cost": 4.44 },
-    "1727595771504": { "name": "Red Eye", "cost": 3.45 },
-    "1727586709242": { "name": "5-hour Energy (2oz)", "cost": 5.60 },
-    "1727592250322": { "name": "Cortado", "cost": 4.48 },
-    "1727630731059": { "name": "NOS Energy Drink (16oz)", "cost": 3.71 },
-    "1727584588314": { "name": "Drip Coffee (12oz)", "cost": 5.96 },
-    "1727630390005": { "name": "Celsius Energy Drink (12oz)", "cost": 3.23 },
-    "1727595715018": { "name": "Matcha Latte", "cost": 4.49 },
-    "1727605577918": { "name": "AMP Energy Drink (16oz)", "cost": 6.29 },
-    "1727565390441": { "name": "Vietnamese Coffee", "cost": 3.38 },
-    "1727641229973": { "name": "Flat White", "cost": 5.42 },
-    "1727610658037": { "name": "Black Coffee (8oz)", "cost": 3.46 },
-    "1727620751667": { "name": "Bang Energy (16oz)", "cost": 6.39 },
-    "1727597163157": { "name": "Monster Energy (16oz)", "cost": 6.81 },
-    "1727590586957": { "name": "Iced Coffee (8oz)", "cost": 3.76 },
-    "1727610760698": { "name": "Monster Java (15oz)", "cost": 4.41 },
-    "1727601688000": { "name": "Nitro Cold Brew (12oz)", "cost": 4.59 },
-    "1727602354621": { "name": "Turkish Coffee", "cost": 3.96 },
-    "1727599341790": { "name": "Double Espresso", "cost": 5.89 },
-    "1727566519925": { "name": "Flat White", "cost": 3.87 },
-    "1727554338958": { "name": "Espresso", "cost": 3.51 },
-    "1727623439992": { "name": "Red Bull (8.4oz)", "cost": 5.21 },
-    "1727569314281": { "name": "AMP Energy Drink (16oz)", "cost": 5.58 },
-    "1727577846796": { "name": "Starbucks Doubleshot (6.5oz)", "cost": 6.51 },
-    "1727651270793": { "name": "Drip Coffee (12oz)", "cost": 5.49 },
-    "1727571590403": { "name": "Red Eye", "cost": 3.66 },
-    "1727575199865": { "name": "Reign Energy Drink (16oz)", "cost": 6.94 },
-    "1727613114673": { "name": "Vietnamese Coffee", "cost": 4.08 },
-    "1727553981855": { "name": "Cold Brew (12oz)", "cost": 4.87 },
-    "1727628992138": { "name": "Zipfizz (1 tube)", "cost": 6.58 },
-    "1727626471677": { "name": "Reign Energy Drink (16oz)", "cost": 3.24 },
-    "1727618530023": { "name": "Zipfizz (1 tube)", "cost": 6.99 },
-    "1727616747401": { "name": "Turkish Coffee", "cost": 5.38 },
-    "1727635847332": { "name": "Black Coffee (8oz)", "cost": 6.11 }
-}
-
 export const coffeeOptions: types.coffeeOption[] = [
     { "name": "Espresso", "caffeine": 63 },
     { "name": "Double Espresso", "caffeine": 126 },
@@ -110,6 +64,7 @@ const halfLifeHours = 5
 
 
 export function calculateCurrentCaffeineLevel(historyData: types.historyType): number {
+    if(!historyData){return 0}
     const currentTime = Date.now()
     const halfLife = halfLifeHours * 60 * 60 * 1000 // 5 hours in milliseconds
     const maxAge = 48 * 60 * 60 * 1000 // 48 hours in milliseconds
@@ -137,6 +92,7 @@ export function getCaffeineAmount(coffeeName: string): number {
 }
 
 export function getTopThreeCoffees(historyData: types.historyType): types.topThreeType[] {
+    if(!historyData) {return []}
     const coffeeCount: types.coffeeCountType = {}
 
     // Count occurrences of each coffee type
@@ -203,6 +159,12 @@ export function getDDMM(utcMilliseconds: number): {day: string, month:string}{
 }
 
 export function calculateCoffeeStats(coffeeConsumptionHistory: types.historyType): types.coffeeStatsType {
+    if(!coffeeConsumptionHistory) {return {
+        daily_caffeine: 0,
+        daily_cost: 0,
+        average_coffees: 0,
+        total_cost: 0,
+    }}
     const dailyStats: types.dailyStatsType= {}
     let totalCoffees = 0
     let totalCost = 0

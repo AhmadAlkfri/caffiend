@@ -1,9 +1,11 @@
+import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
-import { calculateCurrentCaffeineLevel, coffeeConsumptionHistory, getCaffeineAmount, getDateFromUTC, getDDMM } from "../utils";
+import { calculateCurrentCaffeineLevel, getCaffeineAmount, getDateFromUTC, getDDMM } from "../utils";
 
 export default function Hisotry(){
+    const { globalData } = useAuth()
     const [summary, setSummary] = useState("Click a coffee to see information!")
-    const [selectedCup, setSelectedCup] = useState<number|undefined>(undefined)
+    const [selectedCup, setSelectedCup] = useState<string|undefined>(undefined)
     return(
         <>
             <div className="section-header">
@@ -11,8 +13,8 @@ export default function Hisotry(){
                 <h2>History</h2>
             </div>
             <p><i>{summary}</i></p>
-            <div className="coffee-history">
-                {Object.keys(coffeeConsumptionHistory).sort((a, b) => {
+            {globalData && (<div className="coffee-history">
+                {Object.keys(globalData).sort((a, b) => {
                     if (a < b) {
                         return 1;
                     }
@@ -23,26 +25,26 @@ export default function Hisotry(){
 
                     return 0;
                 }).map((utcTime, coffeeIndex)=>{
-                    const coffee = coffeeConsumptionHistory[utcTime]
+                    const coffee = globalData[utcTime]
                     const originalAmount = getCaffeineAmount(coffee.name)
                     const remainingAmount = calculateCurrentCaffeineLevel({[utcTime]:coffee})
                     const date = getDateFromUTC(+utcTime)
                     const {day, month} = getDDMM(+utcTime)
-                    const summaryString = `Coffee Type: ${coffee.name} \nConsumed: ${date} \nCost: $${coffee.cost} | ${remainingAmount}mg / ${originalAmount}mg of caffeine remaining in system`
+                    const summaryString = `Coffee Type: ${coffee.name} \nConsumed: ${date} \nCost: $${coffee.cost} | ${remainingAmount.toFixed(2)}mg / ${originalAmount}mg of caffeine remaining in system`
                     
                     return(
                         <div title={summary} key={coffeeIndex}
-                        className={"history-card " + (coffeeIndex === selectedCup ? "history-card-selected" : "")}
+                        className={"history-card " + (utcTime === selectedCup ? "history-card-selected" : "")}
                         onClick={()=>{
                             setSummary(summaryString)
-                            setSelectedCup(coffeeIndex)
+                            setSelectedCup(utcTime)
                         }}>
                             <i className="fa-solid fa-mug-hot"></i>
                             <h6>{day}/{month}</h6>
                         </div>
                     )
                 })}            
-            </div>
+            </div>)}
         </>
     )
 }

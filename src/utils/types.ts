@@ -39,7 +39,7 @@ export type contextType = {
     globalUser: User | null
     globalData: historyType | null
     isLoading: boolean
-    setGlobalData: (React.Dispatch<React.SetStateAction<object | null>>) | ((obj:object) => void)
+    setGlobalData: (React.Dispatch<React.SetStateAction<historyType | null>>) | ((obj:object) => void)
     signUp: (email: string, password: string) => (Promise<UserCredential> | void)
     logIn: (email: string, password: string) => (Promise<UserCredential> | void)
     logOut: () => (Promise<void> | void )

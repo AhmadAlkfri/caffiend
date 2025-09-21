@@ -83,7 +83,7 @@ export default function CoffeeForm(props: formProps){
                     setCoffeeSelection("")
                 }}
                 >
-                    <h4>Custom</h4>
+                    <h4>Other</h4>
                     <p>?? mg</p>
                 </button>
             </div>

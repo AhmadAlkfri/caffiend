@@ -3,7 +3,7 @@ import { useState, useEffect, useContext, createContext } from 'react'
 import { auth, db } from "../../firebase"
 import { doc, getDoc } from 'firebase/firestore'
 import type { User } from 'firebase/auth'
-import type { contextType } from '../utils/types'
+import type { contextType, historyType } from '../utils/types'
 
 type authProviderProps = {
     children: React.ReactNode
@@ -33,7 +33,7 @@ export function useAuth(){
 export function AuthProvider(props:authProviderProps){
     const { children } = props
     const [globalUser, setGlobalUser] = useState<User|null>(null)
-    const [globalData, setGlobalData] = useState<object|null>(null)
+    const [globalData, setGlobalData] = useState<historyType|null>(null)
     const [isLoading, setIsLoading] = useState(false)
     
     function signUp(email: string, password: string){

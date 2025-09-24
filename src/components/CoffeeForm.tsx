@@ -110,12 +110,12 @@ export default function CoffeeForm(props: formProps){
             <div className="time-entry">
                 <div>
                     <h6>Hours</h6>
-                    <input id="hours-input" type="range" min={0} max={23} step={1} defaultValue={0}
+                    <input id="hours-input" type="range" min={0} max={23} step={1} defaultValue={0} value={hours}
                     onChange={(e)=>{setHours(e.currentTarget.valueAsNumber)}}/>
                 </div>
                 <div>
                     <h6>Minutes</h6>
-                    <input id="mins-input" type="range" min={0} max={59} step={1} defaultValue={30}
+                    <input id="mins-input" type="range" min={0} max={59} step={1} defaultValue={30} value={mins}
                     onChange={(e)=>{setMins(e.currentTarget.valueAsNumber)}}/>
                 </div>
             </div>

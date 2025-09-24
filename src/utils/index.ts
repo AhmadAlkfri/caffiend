@@ -1,6 +1,12 @@
 import type * as types from "./types"
 
 export const statusLevels = {
+    none: {
+        color: "#28c428ff",
+        background: "#d1fae5",
+        description: '...',
+        maxLevel: 0
+    },
     low: {
         color: "#047857",
         background: "#d1fae5",
@@ -17,7 +23,13 @@ export const statusLevels = {
         color: "#e11d48",
         background: "#ffe4e6",
         description: 'Elevated caffeine levels can cause jitteriness, rapid heartbeat, and trouble concentrating, signaling an excessive intake.',
-        maxLevel: 9999
+        maxLevel: 1200
+    },
+    LETHAL: {
+        color: "#ff0000ff",
+        background: "#000000ff",
+        description: 'How are you still alive? Go to a hospital please.',
+        maxLevel: 999999999
     },
 }
 
@@ -29,6 +41,7 @@ export const coffeeOptions: types.coffeeOption[] = [
     { "name": "Latte", "caffeine": 80 },
     { "name": "Mocha", "caffeine": 90 },
     { "name": "Macchiato", "caffeine": 85 },
+    { "name": "French Vanilla", "caffeine": 80 },
     { "name": "Flat White", "caffeine": 130 },
     { "name": "Cortado", "caffeine": 85 },
     { "name": "Red Eye", "caffeine": 159 },
@@ -57,7 +70,8 @@ export const coffeeOptions: types.coffeeOption[] = [
     { "name": "Starbucks Doubleshot (6.5oz)", "caffeine": 135 },
     { "name": "Monster Java (15oz)", "caffeine": 188 },
     { "name": "AMP Energy Drink (16oz)", "caffeine": 142 },
-    { "name": "Zipfizz (1 tube)", "caffeine": 100 }
+    { "name": "Zipfizz (1 tube)", "caffeine": 100 },
+    { "name": "Water", "caffeine": 0}
 ]
 
 const halfLifeHours = 5

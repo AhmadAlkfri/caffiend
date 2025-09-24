@@ -21,8 +21,8 @@ export default function Stats(){
     const { globalData } = useAuth()
     const stats = calculateCoffeeStats(globalData)
     const caffeineLevel = calculateCurrentCaffeineLevel(globalData)
-    const warningLevel = caffeineLevel < statusLevels['low'].maxLevel ? "low" :
-    caffeineLevel < statusLevels['moderate'].maxLevel ? "moderate" : "high"
+    const warningLevel = caffeineLevel == statusLevels['none'].maxLevel ? "none" : caffeineLevel < statusLevels['low'].maxLevel ? "low" :
+    caffeineLevel < statusLevels['moderate'].maxLevel ? "moderate" : caffeineLevel < statusLevels['high'].maxLevel ? "high" : "LETHAL"
     return(
         <>
             <div className="section-header">

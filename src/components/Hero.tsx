@@ -1,13 +1,16 @@
+import { useAuth } from "../context/AuthContext"
+
 export default function Hero(){
+    const {globalUser} = useAuth()
     return(
         <>
             <h1>Coffee Tracking for Coffee Fiends!</h1>
-            <div className="benefits-list">
+            {!globalUser && (<div className="benefits-list">
                 <h3 className="font-bolder">Try <span className="text-gradient">Caffiend</span> and start... </h3>
                 <p>✅Tracking every coffee</p>
                 <p>✅Measuing your blood caffeine levels</p>
                 <p>✅Costing and quantifying you addiction</p>
-            </div>
+            </div>)}
             <div className="card info-card">
                 <div>
                     <i className="fa-solid fa-circle-info"></i>
